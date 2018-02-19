@@ -70,7 +70,7 @@ public class Clients implements ReceiveListener {
             if(item != client) {
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("id", client.getId());
+                    json.put("id", item.getId());
                     json.put("action", "newPlayer");
                     json.put("TAG", "getAllPlayers");
                     JSONObject pos = new JSONObject();
