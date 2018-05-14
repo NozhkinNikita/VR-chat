@@ -17,7 +17,7 @@ public class EventListener : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         print("Connection");
-        TcpClient client = new TcpClient("192.168.1.35", 16000);
+        TcpClient client = new TcpClient("localhost", 16000);
         stream = client.GetStream();
         stream.ReadTimeout = 10;
 
