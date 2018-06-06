@@ -20,15 +20,16 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 
 		Vector3 moveDirection = Vector3.zero;
-		if (Input.GetKey (KeyCode.W))
+		if (Input.GetKey (KeyCode.W)) {  
+			Debug.Log ("azaz1"); 
 			moveDirection += m_MainCamera.transform.forward;
+		}
 		if (Input.GetKey (KeyCode.S))
 			moveDirection -= m_MainCamera.transform.forward;
 		if (Input.GetKey (KeyCode.D))
 			moveDirection += m_MainCamera.transform.right;
 		if (Input.GetKey (KeyCode.A))
 			moveDirection -= m_MainCamera.transform.right;
-
 		transform.position += moveDirection.normalized * speed * Time.deltaTime;
 
 	//	transform.rotation = m_MainCamera.transform.rotation;

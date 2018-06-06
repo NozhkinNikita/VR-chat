@@ -6,14 +6,17 @@ using System.Net.Sockets;
 using System;
 using System.IO;
 using System.Text;
-
+using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class EventListener : MonoBehaviour {
     public Rigidbody mainPlayer;
     StreamWriter writer;
     NetworkStream stream;
     string id;
-
+	Texture2D deskTexture;
+	public int pageNumber = 1;
+	 
 	// Use this for initialization
 	void Start () {
         print("Connection");
@@ -21,17 +24,18 @@ public class EventListener : MonoBehaviour {
         stream = client.GetStream();
         stream.ReadTimeout = 10;
 
-        if (stream.CanRead)
-        {
+        if (stream.CanRead) {
             writer = new StreamWriter(stream);
             print("Writer created");
             readData ();
         }
+		deskTexture = Resources.Load ("Images/1") as Texture2D;
+		GameObject imageDesk = GameObject.Find ("RawImage");
+		imageDesk.GetComponent<RawImage> ().texture = deskTexture;  
 	}
 
     public void handleEvent(Vector3 position, Quaternion rotation)
     {
-        print(id);
         JSONObject json = new JSONObject();
         json.AddField("action", "move");
         JSONObject pos = new JSONObject();
@@ -54,7 +58,6 @@ public class EventListener : MonoBehaviour {
         JSONObject json = new JSONObject();
         json.AddField("action", "moveChar");
         JSONObject pos = new JSONObject();
-
         pos.AddField("X", move.x.ToString());
         pos.AddField("Y", move.y.ToString());
         pos.AddField("Z", move.z.ToString());
@@ -71,8 +74,6 @@ public class EventListener : MonoBehaviour {
         writer.Flush();
     }
 
-
-	
     void readData ()
     {
         if (stream.CanRead)
@@ -82,9 +83,8 @@ public class EventListener : MonoBehaviour {
                 byte[] bLen = new Byte[4];
                 int data = stream.Read(bLen, 0, 4);
                 if (data > 0)
-                {
+                { 
                     int len = BitConverter.ToInt32(bLen, 0);
-                    print("len = " + len);
                     Byte[] buff = new byte[1024];
                     data = stream.Read(buff, 0, len);
                     if (data > 0)
@@ -131,6 +131,8 @@ public class EventListener : MonoBehaviour {
             case "move":
                 MoveClient(json.GetField("id").str, position, rotation);
                 break;
+		case "image":
+				break;
         }
     }
 
